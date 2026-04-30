@@ -5,6 +5,8 @@ import { FiX } from "react-icons/fi";
 import "../styles/forms.css";
 
 export default function TaskForm({ task, onClose }) {
+  const API = "https://team-task-manager-production-6789.up.railway.app";
+
   const [formData, setFormData] = useState(
     task || {
       title: "",
@@ -28,16 +30,17 @@ export default function TaskForm({ task, onClose }) {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/projects", {
+      const res = await axios.get(`${API}/api/projects`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProjects(res.data);
-      // Extract all members from projects
+
       const allMembers = new Set();
       res.data.forEach(p => {
         p.members?.forEach(m => allMembers.add(JSON.stringify(m)));
       });
       setUsers(Array.from(allMembers).map(m => JSON.parse(m)));
+
     } catch (err) {
       setError("Failed to fetch projects");
     }
@@ -64,16 +67,20 @@ export default function TaskForm({ task, onClose }) {
 
       if (task?._id) {
         await axios.put(
-          `http://localhost:5000/api/tasks/${task._id}`,
+          `${API}/api/tasks/${task._id}`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
-        await axios.post("http://localhost:5000/api/tasks", payload, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.post(
+          `${API}/api/tasks`,
+          payload,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
       }
+
       onClose();
+
     } catch (err) {
       setError(err.response?.data?.error || "Failed to save task");
     } finally {
@@ -102,6 +109,7 @@ export default function TaskForm({ task, onClose }) {
             onChange={handleChange}
             required
           />
+
           <textarea
             name="description"
             placeholder="Task Description"

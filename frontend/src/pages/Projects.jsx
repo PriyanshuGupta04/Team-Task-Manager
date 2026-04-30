@@ -6,6 +6,8 @@ import ProjectForm from "../components/ProjectForm";
 import "../styles/projects.css";
 
 export default function Projects() {
+  const API = "https://team-task-manager-production-6789.up.railway.app";
+
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -18,12 +20,13 @@ export default function Projects() {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/projects", {
+      const res = await axios.get(`${API}/api/projects`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProjects(res.data);
     } catch (err) {
-      console.error("Failed to fetch projects:", err);
+      console.error("Projects API not available yet");
+      setProjects([]); // safe fallback
     } finally {
       setLoading(false);
     }
@@ -32,12 +35,12 @@ export default function Projects() {
   const handleDeleteProject = async (id) => {
     if (window.confirm("Are you sure?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/projects/${id}`, {
+        await axios.delete(`${API}/api/projects/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProjects(projects.filter(p => p._id !== id));
       } catch (err) {
-        console.error("Failed to delete project:", err);
+        console.error("Delete failed");
       }
     }
   };
@@ -71,7 +74,9 @@ export default function Projects() {
 
       <div className="projects-grid">
         {projects.length === 0 ? (
-          <p className="no-data">No projects yet. Create one to get started!</p>
+          <p className="no-data">
+            Projects feature not available (backend not implemented)
+          </p>
         ) : (
           projects.map(project => (
             <div key={project._id} className="project-card">
@@ -95,12 +100,14 @@ export default function Projects() {
                   </button>
                 </div>
               </div>
+
               <p className="project-description">{project.description}</p>
+
               <div className="project-footer">
                 <span className="members">
-                  <FiUsers /> {project.members.length} members
+                  <FiUsers /> {project.members?.length || 0} members
                 </span>
-                <span className="status">{project.status}</span>
+                <span className="status">{project.status || "active"}</span>
               </div>
             </div>
           ))

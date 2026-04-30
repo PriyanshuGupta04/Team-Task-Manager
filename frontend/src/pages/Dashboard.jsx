@@ -5,6 +5,8 @@ import { FiCheck, FiClock, FiAlertCircle, FiTrendingUp } from "react-icons/fi";
 import "../styles/dashboard.css";
 
 export default function Dashboard() {
+  const API = "https://team-task-manager-production-6789.up.railway.app";
+
   const [stats, setStats] = useState({
     total: 0,
     completed: 0,
@@ -21,9 +23,10 @@ export default function Dashboard() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/tasks", {
+      const res = await axios.get(`${API}/api/tasks`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+
       const tasks = res.data;
 
       const completed = tasks.filter(t => t.status === "done").length;
@@ -40,6 +43,7 @@ export default function Dashboard() {
       });
 
       setRecentTasks(tasks.slice(0, 5));
+
     } catch (err) {
       console.error("Failed to fetch stats:", err);
     } finally {
@@ -52,7 +56,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard">
       <h1>Dashboard</h1>
-      
+
       <div className="stats-grid">
         <div className="stat-card total">
           <FiTrendingUp className="stat-icon" />
@@ -89,6 +93,7 @@ export default function Dashboard() {
 
       <div className="recent-section">
         <h2>Recent Tasks</h2>
+
         {recentTasks.length === 0 ? (
           <p className="no-data">No tasks yet. Start by creating a task!</p>
         ) : (
@@ -115,7 +120,11 @@ export default function Dashboard() {
                       {task.priority}
                     </span>
                   </td>
-                  <td>{new Date(task.dueDate).toLocaleDateString()}</td>
+                  <td>
+                    {task.dueDate
+                      ? new Date(task.dueDate).toLocaleDateString()
+                      : "-"}
+                  </td>
                 </tr>
               ))}
             </tbody>

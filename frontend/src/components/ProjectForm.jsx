@@ -5,6 +5,8 @@ import { FiX, FiPlus } from "react-icons/fi";
 import "../styles/forms.css";
 
 export default function ProjectForm({ project, onClose }) {
+  const API = "https://team-task-manager-production-6789.up.railway.app";
+
   const [formData, setFormData] = useState(
     project || { name: "", description: "" }
   );
@@ -25,7 +27,7 @@ export default function ProjectForm({ project, onClose }) {
     if (!newMemberEmail) return;
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/projects/${project._id}/members`,
+        `${API}/api/projects/${project._id}/members`,
         { email: newMemberEmail },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -39,7 +41,7 @@ export default function ProjectForm({ project, onClose }) {
   const handleRemoveMember = async (userId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/projects/${project._id}/members/${userId}`,
+        `${API}/api/projects/${project._id}/members/${userId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMembers(res.data.members);
@@ -56,14 +58,16 @@ export default function ProjectForm({ project, onClose }) {
     try {
       if (project?._id) {
         await axios.put(
-          `http://localhost:5000/api/projects/${project._id}`,
+          `${API}/api/projects/${project._id}`,
           formData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
-        await axios.post("http://localhost:5000/api/projects", formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.post(
+          `${API}/api/projects`,
+          formData,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
       }
       onClose();
     } catch (err) {

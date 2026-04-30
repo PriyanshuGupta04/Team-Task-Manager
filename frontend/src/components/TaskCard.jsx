@@ -21,7 +21,7 @@ export default function TaskCard({ task, onEdit, onDelete, onStatusChange }) {
           : "todo";
       
       await axios.put(
-        `http://localhost:5000/api/tasks/${task._id}`,
+        `https://team-task-manager-production-6789.up.railway.app/api/tasks/${task._id}`,
         { status: nextStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

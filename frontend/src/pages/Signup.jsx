@@ -5,11 +5,14 @@ import { AuthContext } from "../context/AuthContext";
 import "../styles/auth.css";
 
 export default function Signup() {
+  const API = "https://team-task-manager-production-6789.up.railway.app";
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -17,14 +20,17 @@ export default function Signup() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/signup", {
+      const res = await axios.post(`${API}/api/auth/signup`, {
         name,
         email,
         password
       });
+
       login(res.data.token, res.data.user);
       navigate("/dashboard");
+
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed");
     } finally {
@@ -36,7 +42,9 @@ export default function Signup() {
     <div className="auth-container">
       <div className="auth-card">
         <h1>Sign Up</h1>
+
         {error && <div className="error-message">{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -45,6 +53,7 @@ export default function Signup() {
             onChange={(e) => setName(e.target.value)}
             required
           />
+
           <input
             type="email"
             placeholder="Email"
@@ -52,6 +61,7 @@ export default function Signup() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
           <input
             type="password"
             placeholder="Password"
@@ -59,10 +69,12 @@ export default function Signup() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
           <button type="submit" disabled={loading}>
             {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
+
         <p>
           Already have an account? <Link to="/login">Login</Link>
         </p>

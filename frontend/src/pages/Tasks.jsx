@@ -7,6 +7,8 @@ import TaskCard from "../components/TaskCard";
 import "../styles/tasks.css";
 
 export default function Tasks() {
+  const API = "https://team-task-manager-production-6789.up.railway.app";
+
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,6 +18,7 @@ export default function Tasks() {
     status: "",
     priority: ""
   });
+
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
@@ -28,7 +31,7 @@ export default function Tasks() {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/tasks", {
+      const res = await axios.get(`${API}/api/tasks`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTasks(res.data);
@@ -55,7 +58,7 @@ export default function Tasks() {
   const handleDeleteTask = async (id) => {
     if (window.confirm("Are you sure?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
+        await axios.delete(`${API}/api/tasks/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setTasks(tasks.filter(t => t._id !== id));
@@ -77,6 +80,7 @@ export default function Tasks() {
     <div className="tasks-page">
       <div className="tasks-header">
         <h1>Tasks</h1>
+
         <button
           className="btn-primary"
           onClick={() => {
@@ -90,6 +94,7 @@ export default function Tasks() {
 
       <div className="filters-bar">
         <FiFilter />
+
         <select
           value={filters.status}
           onChange={(e) => setFilters({ ...filters, status: e.target.value })}
@@ -117,7 +122,9 @@ export default function Tasks() {
 
       <div className="tasks-container">
         {filteredTasks.length === 0 ? (
-          <p className="no-data">No tasks found. Create one to get started!</p>
+          <p className="no-data">
+            No tasks found. Create one to get started!
+          </p>
         ) : (
           filteredTasks.map(task => (
             <TaskCard
