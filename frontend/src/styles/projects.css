@@ -1,0 +1,141 @@
+.projects-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.projects-header h1 {
+  font-size: 32px;
+  color: var(--text-dark);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition: var(--transition-bounce);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  transform-origin: left;
+}
+
+.project-card:hover::after {
+  transform: scaleX(1);
+}
+
+.project-card:hover {
+  transform: translateY(-8px) rotate(1deg);
+  box-shadow: var(--shadow-float), 0 0 25px rgba(139, 92, 246, 0.2);
+}
+
+.project-card:active {
+  transform: translateY(-4px) rotate(0deg);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.project-header h3 {
+  font-size: 18px;
+  color: var(--text-dark);
+  margin: 0;
+  flex: 1;
+}
+
+.project-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.project-description {
+  color: var(--text-light);
+  font-size: 14px;
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+
+.project-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.members {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: var(--light-bg);
+  border-radius: 4px;
+  text-transform: capitalize;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+@media (max-width: 768px) {
+  .projects-page {
+    padding: 16px 12px;
+  }
+
+  .projects-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .projects-header h1 {
+    font-size: 24px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    padding: 16px;
+  }
+
+  .project-header h3 {
+    font-size: 16px;
+  }
+}
